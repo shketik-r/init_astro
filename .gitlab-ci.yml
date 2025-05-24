@@ -1,0 +1,46 @@
+# image: node:latest
+
+# before_script:
+#   - apt-get update && apt-get install -y lftp
+
+# cache:
+#   paths:
+#     - node_modules/
+
+# stages:
+#   - build
+#   - sftp_deploy
+#   - ftp_deploy
+
+# build:
+#   stage: build
+#   script:
+#     - npm install
+#     - npm run build
+#   artifacts:
+#     paths:
+#       - dist/
+#   rules:
+#     - if: $HOST && $HOST_DEST && $USERNAME && $PASSWORD && $HOST_TYPE && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+#       when: on_success
+#       allow_failure: true
+
+# sftp_deploy:
+#   stage: sftp_deploy
+#   rules:
+#     - if: $HOST && $HOST_DEST && $USERNAME && $PASSWORD && $HOST_TYPE == "SFTP" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+#       when: on_success
+#       allow_failure: true
+#   script:
+#     - lftp -e "set sftp:auto-confirm yes; mirror --reverse --verbose dist/ $HOST_DEST" -u $USERNAME,$PASSWORD sftp://$HOST || true
+#   allow_failure: true
+
+# ftp_deploy:
+#   stage: ftp_deploy
+#   rules:
+#     - if: $HOST && $HOST_DEST && $USERNAME && $PASSWORD && $HOST_TYPE == "FTP" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+#       when: on_success
+#       allow_failure: true
+#   script:
+#     - lftp -c "open -u $USERNAME,$PASSWORD $HOST; mirror -R dist/ $HOST_DEST" || true
+#   allow_failure: true

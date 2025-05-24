@@ -1,0 +1,20 @@
+{
+  "plugins": [
+    "prettier-plugin-astro"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.astro",
+        "*.ts",
+        "*.js",
+        "*.html",
+        "*.css",
+        "*.scss"
+      ]
+    }
+  ],
+  "semi": true,
+  "tabWidth": 2,
+  "singleQuote": false
+}

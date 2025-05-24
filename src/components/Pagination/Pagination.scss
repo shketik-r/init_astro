@@ -1,0 +1,51 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+
+  &__link {
+    flex: none;
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 50%;
+
+    &._active {
+      background-color: $primary-main;
+      color: $bg-white;
+    }
+
+    &:is(a) {
+      transition: .3s;
+
+      @include hover {
+        color: $primary-hover;
+      }
+    }
+
+    svg {
+      width: 2.4rem;
+      height: 2.4rem;
+    }
+  }
+
+  &__btn {
+    background-color: transparent;
+
+    &:not(a) {
+      color: $text-tertiary;
+      pointer-events: none;
+    }
+
+    svg {
+      flex: none;
+      width: 2.4rem;
+      height: 2.4rem;
+    }
+  }
+}

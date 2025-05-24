@@ -1,0 +1,53 @@
+@mixin breakpoint($bp) {
+  @media (max-width: $bp) {
+    @content;
+  }
+}
+
+@mixin hover() {
+  @media (hover) {
+    &:hover {
+      @content;
+    }
+  }
+
+  @media (hover: none) {
+    &:active {
+      @content;
+    }
+  }
+}
+
+@mixin img() {
+
+  img,
+  picture,
+  video {
+    @content;
+  }
+}
+
+@mixin lineClamp($count) {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: $count;
+  line-clamp: $count;
+  -webkit-box-orient: vertical;
+}
+
+
+@mixin scroll($size: 0.4rem, $color: red, $radius: 2rem, $trackColor: transparent) {
+  &::-webkit-scrollbar {
+    width: $size;
+    height: $size;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $trackColor;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $color;
+    border-radius: $radius;
+  }
+}

@@ -1,0 +1,16 @@
+@import "scss-reset/reset";
+@import "normalize-scss";
+@import "./utils/vars";
+@import "./utils/mixins";
+@import "./utils/fonts";
+
+@import "venobox/dist/venobox.css";
+// @import "plyr/dist/plyr.css";
+
+html {
+  box-sizing: border-box;
+}
+
+@import "./general";
+@import "./components";
+@import "./pages";

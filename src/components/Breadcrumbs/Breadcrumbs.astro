@@ -1,0 +1,23 @@
+---
+interface Props {
+  items: string[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="fs-14 breadcrumbs">
+  {
+    items.map((el, i) => {
+      if (i === items.length - 1) {
+        return <span class="c-tt breadcrumbs__link">{el}</span>;
+      } else {
+        return (
+          <a href="#" class="c-ts hover:ph breadcrumbs__link">
+            {el}
+          </a>
+        );
+      }
+    })
+  }
+</div>

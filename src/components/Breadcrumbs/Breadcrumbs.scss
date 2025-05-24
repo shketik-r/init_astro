@@ -1,0 +1,16 @@
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+
+  &__link {
+    &:not(:first-child) {
+      &::before {
+        content: "/";
+        margin-right: 0.8rem;
+      }
+    }
+  }
+}
