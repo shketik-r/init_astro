@@ -6,11 +6,11 @@ import "../styles/style.scss";
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  // const lazyLoad = new LazyLoad({
-  //   elements_selector: ".lazy",
-  // });
+  const lazyLoad = new LazyLoad({
+    elements_selector: ".lazy",
+  });
 
-  // lazyLoad.update();
+  lazyLoad.update();
 
   // Инициализация компонентов и обработчиков
   // общие
@@ -18,19 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // компоненты
 
-
-  function initSelect() {
-    const selects = document.querySelectorAll("[data-select]:not([data-initialized])");
-    if (selects) {
-      selects.forEach((select) => {
-        const selectComponent = new Select(select);
-        selectComponent.init();
-        select.setAttribute('data-initialized', 'true');
-      });
-    }
-  }
-
-  initSelect();
+  Select.initAll("[data-select]");
   // <--
 
   // События
@@ -41,7 +29,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.addEventListener("vBoxContentLoaded", () => {
     // lazyLoad.update();
-    initSelect();
+    Select.initAll("[data-select]");
+
   });
 });
 

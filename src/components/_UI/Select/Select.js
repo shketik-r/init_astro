@@ -3,17 +3,35 @@ export class Select {
     this.options = {};
     this.select = select;
     this.arrSelectedValue = [];
+    // Биндим методы для корректного удаления и добавления слушателей
+    this._onButtonClick = this._toggleOptions.bind(this);
+    this._onDocumentClick = this._handleClickOutside.bind(this);
+    this._onInputChange = this._addValue.bind(this);
   }
 
-  init() {
-    this.selectContainer = typeof this.select === "string" ? document.querySelector(this.select) : this.select;;
-    this.getElements();
-    this.getOptions();
-    this.button.addEventListener('click', () => this.toggleOptions());
-    this.populateOptions();
-    document.addEventListener('click', (event) => this.handleClickOutside(event));
+_init() {
+    this.selectContainer =  this.select;
+    this._getElements();
+    this._getOptions();
+    this._populateOptions();
+    this.button.addEventListener('click', this._onButtonClick);
+    document.addEventListener('click', this._onDocumentClick);
   }
-  getElements() {
+
+  _destroy() {
+    if (!this.button || !this.selectContainer) return;
+    this.button.removeEventListener('click', this._onButtonClick);
+    document.removeEventListener('click', this._onDocumentClick);
+    // Удаляем обработчики change с инпутов
+    this.inputAll.forEach(input => {
+      input.removeEventListener('change', this._onInputChange);
+    });
+    this.arrSelectedValue = [];
+    this.selectContainer.classList.remove('_show');
+  }
+
+
+  _getElements() {
     this.selectedValue = this.selectContainer.querySelector('[data-select-value]');
     this.optionsContainer = this.selectContainer.querySelector('[data-select-options]');
     this.button = this.selectContainer.querySelector('[data-select-btn]');
@@ -21,65 +39,78 @@ export class Select {
     this.placeholder = this.selectedValue.dataset.selectPlaceholder;
   }
 
-  getOptions() {
+  _getOptions() {
     this.options = {
-      // закрыть после выбора (по умолчанию false)
       closeAfterSelection: this.selectContainer.dataset.closeSelection ? JSON.parse(this.selectContainer.dataset.closeSelection) : false,
-      // показывать выбранные значения (по умолчанию true)
       showSelectedValue: this.selectContainer.dataset.showValue ? JSON.parse(this.selectContainer.dataset.showValue) : true,
-    }
+    };
   }
 
-  populateOptions() {
-    if (this.inputAll.length < 0) {
+  _populateOptions() {
+    if (this.inputAll.length <= 0) {
       this.selectedValue.textContent = this.placeholder ? this.placeholder : "пустой селект!";
       return;
     }
+    this.arrSelectedValue = [];
+
     this.inputAll.forEach(input => {
-      input.checked && this.arrSelectedValue.push(input.value);
-      input.addEventListener('change', () => this.addValue())
+      if (input.checked) this.arrSelectedValue.push(input.value);
+      input.addEventListener('change', this._onInputChange);
     });
-    // Показываем выбранные значения
-    this.selectOption();
+    this._selectOption();
   }
 
-  toggleOptions() {
+  _toggleOptions() {
     this.selectContainer.classList.toggle('_show');
   }
 
-  addValue() {
+  _addValue() {
     this.arrSelectedValue = [];
-    // Добавляем в массив выбранные значения
-    this.inputAll.forEach(input => input.checked && this.arrSelectedValue.push(input.value));
-    // Показываем выбранные значения
-    this.selectOption();
+    this.inputAll.forEach(input => {
+      if (input.checked) this.arrSelectedValue.push(input.value);
+    });
+    this._selectOption();
   }
 
-  selectOption() {
-    // Если ничего не выбрано
+  _selectOption() {
     if (this.arrSelectedValue.length === 0) {
-      // Устанавливаем значение по умолчанию     
       this.selectedValue.textContent = this.placeholder ? this.placeholder : 'Выберите';
       return;
-    };
-    // Показываем выбранные значения 
+    }
+
     if (this.options.showSelectedValue) {
       this.selectedValue.textContent = this.arrSelectedValue.join(', ');
       this.selectedValue.title = this.selectedValue.textContent;
-    }else{
+    } else {
       this.selectedValue.textContent = this.placeholder ? this.placeholder : 'Выберите';
-       this.selectedValue.title = this.selectedValue.textContent;
+      this.selectedValue.title = this.selectedValue.textContent;
     }
 
-    // если closeAfterSelection = true - закрыть после выбора
     this.options.closeAfterSelection && this.selectContainer.classList.remove('_show');
   }
 
-  handleClickOutside(event) {
+  _handleClickOutside(event) {
     if (!this.selectContainer.contains(event.target)) {
       this.selectContainer.classList.remove('_show');
     }
   }
+
+
+ static initAll(target = '[data-select]') {
+    const selects = document.querySelectorAll(target);
+    selects.forEach(selectElement => {
+      // Если селект уже инициализирован, сначала уничтожаем старый экземпляр
+      if (selectElement._selectInstance) {
+        selectElement._selectInstance._destroy();
+      }
+      // Создаем новый экземпляр и инициализируем
+      const instance = new Select(selectElement);
+      instance._init();
+      // Сохраняем экземпляр для повторного управления
+      selectElement._selectInstance = instance;
+    });
+  }
 }
+
 
 
