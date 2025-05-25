@@ -30,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("vBoxContentLoaded", () => {
     // lazyLoad.update();
     Select.initAll("[data-select]");
-
   });
 });
 

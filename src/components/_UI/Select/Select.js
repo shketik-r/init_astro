@@ -1,4 +1,5 @@
 export class Select {
+  
   constructor(select) {
     this.options = {};
     this.select = select;
