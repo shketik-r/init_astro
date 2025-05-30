@@ -1,14 +1,61 @@
 ---
 import Layout from "src/layouts/Layout.astro";
 import icons from "src/icons.json";
+
 ---
 
 <Layout title="all icons">
-  <div style="display: flex; flex-wrap: wrap; gap: 10px; padding: 50px 20px">
-    <!-- {
-      icons.map((icon) => (
-
-      ))
-    } -->
+  <div class="icons-all container">
+  <h2>Иконки</h2>
+  <div class="icons-grid">
+    {
+      icons.map((icon) => {
+        return (
+          <div class="icons-item">
+            <div class="icons-item-name">{icon}</div>
+            <svg>
+              <use href=`#iconSearch` />
+            </svg>
+          </div>
+        );
+      })
+    }
   </div>
+  </div>
+
 </Layout>
+
+
+<style is:inline>
+
+.icons-all{
+    padding-top: 200px;
+    padding-bottom: 200px;
+}
+
+.icons-all h2{
+    margin-bottom: 40px;
+}
+.icons-grid{
+    display: flex;
+    gap: 20px;
+  }
+
+  .icons-item{
+   
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px;
+    border: 1px solid #555555a1;
+    border-radius: 5px;
+  }
+
+  .icons-item svg{
+    stroke: #000;
+    fill: #000;
+     width: 40px;
+    height: 40px;
+  }
+</style>

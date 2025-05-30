@@ -22,10 +22,19 @@ export default defineConfig({
       // Минимальный размер инлайна CSS и JS
       assetsInlineLimit: 0,
       rollupOptions: {
-        // Названия без хэшей
         output: {
-          entryFileNames: "js/[name].js",
-          // assetFileNames: "[ext]/[name][extname]",
+          entryFileNames: (chunkInfo) => {
+            console.log(chunkInfo);
+            
+            // const scriptFiles = chunkInfo.moduleIds.filter(path => {
+            //   const segments = path.split('/');
+            //   const scriptIndex = segments.indexOf('scripts');
+            //   return scriptIndex !== -1 && segments.length === scriptIndex + 2;
+            // });
+            // const scriptFileNamesInRoot = scriptFiles.map(filePath => filePath.split('/').pop().split('\\').pop());
+            // return `js/${scriptFileNamesInRoot[0]}`; // Сохраняем оригинальное имя файла
+          },
+
           assetFileNames: (chunkInfo) => {
             const nameArr = chunkInfo.name.split(".");
             const isStyle = nameArr[nameArr.length - 1] === "css";
@@ -33,7 +42,7 @@ export default defineConfig({
             if (isStyle) {
               return "[ext]/[name][extname]";
             } else {
-              return "convertImg/[name][extname]";
+              return "[ext]/[name][extname]";
             }
           },
         },

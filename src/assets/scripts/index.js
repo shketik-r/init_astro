@@ -1,6 +1,6 @@
 
 import LazyLoad from "vanilla-lazyload";
-import { vBoxHandler } from "./vBox";
+import { vBoxHandler } from "./utils/vBox";
 import { Select } from "../../components/_UI/Select/Select";
 import "../styles/style.scss";
 

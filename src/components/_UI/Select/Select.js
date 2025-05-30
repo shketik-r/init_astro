@@ -99,6 +99,9 @@ _init() {
 
  static initAll(target = '[data-select]') {
     const selects = document.querySelectorAll(target);
+    console.log('initSelect');
+    
+    if(selects.length === 0) return;
     selects.forEach(selectElement => {
       // Если селект уже инициализирован, сначала уничтожаем старый экземпляр
       if (selectElement._selectInstance) {
