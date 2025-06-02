@@ -1,49 +1,39 @@
-import { defineConfig, squooshImageService } from "astro/config";
+import { defineConfig } from 'astro/config';
 
-// https://astro.build/config
 export default defineConfig({
-  // Отключает минификацию HTML
   compressHTML: false,
   trailingSlash: "never",
+  output: 'static',
   build: {
+    outDir: 'dist',
     format: "file",
-    assets: "./convertImg",
     assetsPrefix: "./",
-  },
-  image: {
-    service: squooshImageService(),
   },
   vite: {
     build: {
-      // Отключает разбитие CSS
-      cssCodeSplit: false,
-      // Отключает минификацию в CSS и JS
+      cssCodeSplit: true,       // Включаем разбиение CSS на отдельные файлы
+      inlineStylesheets: 'never',
       minify: false,
-      // Минимальный размер инлайна CSS и JS
       assetsInlineLimit: 0,
+      polyfill: false,
       rollupOptions: {
         output: {
           entryFileNames: (chunkInfo) => {
-            console.log(chunkInfo);
-            
-            // const scriptFiles = chunkInfo.moduleIds.filter(path => {
-            //   const segments = path.split('/');
-            //   const scriptIndex = segments.indexOf('scripts');
-            //   return scriptIndex !== -1 && segments.length === scriptIndex + 2;
-            // });
-            // const scriptFileNamesInRoot = scriptFiles.map(filePath => filePath.split('/').pop().split('\\').pop());
-            // return `js/${scriptFileNamesInRoot[0]}`; // Сохраняем оригинальное имя файла
+            const scriptFiles = chunkInfo.moduleIds.filter(path => {
+              const segments = path.split('/');
+              const scriptIndex = segments.indexOf('scripts');
+              return scriptIndex !== -1 && segments.length === scriptIndex + 2;
+            });
+            const scriptFileNamesInRoot = scriptFiles.map(filePath => filePath.split('/').pop().split('\\').pop());
+            return `js/${scriptFileNamesInRoot[0]}`; // Оригинальные имена для скриптов
           },
-
           assetFileNames: (chunkInfo) => {
-            const nameArr = chunkInfo.name.split(".");
-            const isStyle = nameArr[nameArr.length - 1] === "css";
-
-            if (isStyle) {
-              return "[ext]/[name][extname]";
-            } else {
-              return "[ext]/[name][extname]";
+            console.log(chunkInfo.originalFileName);
+            
+            if (chunkInfo.name && chunkInfo.name.endsWith('.css')) {
+              return 'css/[name][extname]';  // Оригинальные имена для файлов css
             }
+            return 'assets/[name]-[hash][extname]';
           },
         },
       },

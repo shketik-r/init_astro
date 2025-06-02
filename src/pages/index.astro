@@ -1,8 +1,9 @@
 ---
 import LayoutProgress from "../layouts/LayoutProgress.astro";
+
 ---
 
-<LayoutProgress title="Главная">
+<LayoutProgress title="Главная" scripts={['./libs/swiper/swiper-bundle.min.js']}>
   <div class="_progress">
     <div class="_progress__inner">
       <p class="_progress__title">Содержание:</p>

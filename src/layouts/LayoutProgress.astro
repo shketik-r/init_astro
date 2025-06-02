@@ -1,5 +1,12 @@
 ---
-const { title = "заголовок страницы" } = Astro.props;
+type Props = {
+  title?: string;
+  scripts?: string[];
+};
+
+const { title = "заголовок страницы", scripts } = Astro.props;
+
+
 ---
 
 <!doctype html>
@@ -12,16 +19,18 @@ const { title = "заголовок страницы" } = Astro.props;
     <meta name="generator" content={Astro.generator} />
 
     <title>{title}</title>
-
   </head>
   <body>
+    <main class="page">
+      <slot />
+    </main>
 
-      <main class="page">
-        <slot />
-      </main>
+    <!-- scripts -->
+    {
+      scripts &&
+        scripts.map((script) => <script is:inline src={script} defer />)
+    }
 
-
+    <script src="../assets/scripts/main.js"></script>
   </body>
 </html>
-
-     <script src="../assets/scripts/main.js"></script>
