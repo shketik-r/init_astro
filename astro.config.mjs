@@ -11,15 +11,20 @@ export default defineConfig({
   // Отключает минификацию HTML
   compressHTML: false,
   trailingSlash: "never",
-
+  output: 'static',
   build: {
+    outDir: 'dist',
     format: "file",
     assetsPrefix: "./",
   },
   vite: {
     build: {
+      // Отключает разбитие CSS
+      cssCodeSplit: false,
+      // Отключает минификацию в CSS и JS
       minify: false,
       assetsInlineLimit: 0,
+      polyfill: false,
       rollupOptions: {
         output: {
           entryFileNames: (chunkInfo) => {
