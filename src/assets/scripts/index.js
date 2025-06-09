@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Инициализация после загрузки DOM
 
-  window.lumobox = new GlanceBox('[data-glancebox]');
+  window.glanceBox = new GlanceBox('[data-glancebox]');
 
 
   // <--
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("vBoxContentLoaded", () => {
     // lazyLoad.update();
     // Select.initAll("[data-select]");
-    //  initCustomSelects('[custom-select]');
+    // initCustomSelects('[custom-select]');
   });
 });
 

@@ -15,13 +15,7 @@ export class GlanceBox {
       el.addEventListener('click', (event) => {
         event.preventDefault();
         const targetEvent = event.currentTarget;
-
         const type = targetEvent.dataset.glancebox;
-
-        const options = {
-          title: targetEvent.dataset.glanceboxTitle
-        };
-
         let indexElement = 0;
 
         this.items.forEach((item) => {
@@ -32,35 +26,41 @@ export class GlanceBox {
         });
 
         this.targetKey = Number(targetEvent.dataset.key);
-        this.renderWindow(targetEvent, options);
+        this.renderWindow(targetEvent);
       });
     });
   }
 
-  renderWindow(targetEl, options) {
+  renderWindow(targetEl) {
     const glanceContainer = document.createElement('div');
     glanceContainer.className = 'glancebox';
     glanceContainer.innerHTML = `
       <div class="glancebox-controls">
         <button class="glancebox-button glancebox-close">&times;</button>
-        <button class="glancebox-button glancebox-prev">&#8592;</button>
-        <button class="glancebox-button glancebox-next">&#8594;</button>
       </div>
       <div class="glancebox-wrap">
         <div class="glancebox-content"></div>
+        <button class="glancebox-button glancebox-prev">&#8592;</button>
+        <button class="glancebox-button glancebox-next">&#8594;</button>
         <div class="glancebox-details">
-          <span>${this.targetKey + 1} / ${this.saveContentElement}</span> 
-          <span>${options.title? options.title : ''}</span>
         </div>
       </div>
-      
     `;
     document.body.appendChild(glanceContainer);
     const content = glanceContainer.querySelector('.glancebox-content');
-
-    this.updateContent(content, targetEl)
-
+    this.updateContent(content, targetEl);
+    this.updateDetails(targetEl);
     this.addControls(glanceContainer);
+  }
+
+  updateDetails(targetEl) {
+    const options = {
+      caption: targetEl.dataset.glanceboxCaption
+    };
+    document.querySelector('.glancebox-details').innerHTML = `
+          <span class="glancebox-current">${this.targetKey + 1} / ${this.saveContentElement}</span> 
+          <span class="glancebox-title">${options.caption ? options.caption : ''}</span>
+      `;
   }
 
   addControls(glance) {
@@ -76,7 +76,6 @@ export class GlanceBox {
       if (event.target === glance) {
         this.close(glance);
       }
-
     });
   }
 
@@ -99,7 +98,7 @@ export class GlanceBox {
   next() {
     this.targetKey = (this.targetKey >= this.saveContentElement - 1) ? 0 : this.targetKey + 1;
     console.log(this.targetKey);
-    
+
     this.updateContentInLightbox();
   }
 
@@ -118,6 +117,7 @@ export class GlanceBox {
       const img = document.createElement('img');
       img.src = imgSrc;
       content.appendChild(img);
+      this.updateDetails(targetEl);
     }
   }
 
