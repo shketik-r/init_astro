@@ -1,5 +1,5 @@
 export class Select {
-  
+
   constructor(select) {
     this.options = {};
     this.select = select;
@@ -10,8 +10,18 @@ export class Select {
     this._onInputChange = this._addValue.bind(this);
   }
 
-_init() {
-    this.selectContainer =  this.select;
+
+  _getElements() {
+    this.selectedValue = this.selectContainer.querySelector('[data-select-value]');
+    this.optionsContainer = this.selectContainer.querySelector('[data-select-options]');
+    this.button = this.selectContainer.querySelector('[data-select-btn]');
+    this.inputAll = this.selectContainer.querySelectorAll('[data-select-option]');
+    this.placeholder = this.selectedValue.dataset.selectPlaceholder;
+  }
+
+
+  _init() {
+    this.selectContainer = this.select;
     this._getElements();
     this._getOptions();
     this._populateOptions();
@@ -31,14 +41,6 @@ _init() {
     this.selectContainer.classList.remove('_show');
   }
 
-
-  _getElements() {
-    this.selectedValue = this.selectContainer.querySelector('[data-select-value]');
-    this.optionsContainer = this.selectContainer.querySelector('[data-select-options]');
-    this.button = this.selectContainer.querySelector('[data-select-btn]');
-    this.inputAll = this.selectContainer.querySelectorAll('[data-select-option]');
-    this.placeholder = this.selectedValue.dataset.selectPlaceholder;
-  }
 
   _getOptions() {
     this.options = {
@@ -97,11 +99,9 @@ _init() {
   }
 
 
- static initAll(target = '[data-select]') {
+  static initAll(target = '[data-select]') {
     const selects = document.querySelectorAll(target);
-    console.log('initSelect');
-    
-    if(selects.length === 0) return;
+    if (selects.length === 0) return;
     selects.forEach(selectElement => {
       // Если селект уже инициализирован, сначала уничтожаем старый экземпляр
       if (selectElement._selectInstance) {

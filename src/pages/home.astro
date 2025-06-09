@@ -1,8 +1,14 @@
 ---
+import GlanceBox from "@components/_UI/GlanceBox/GlanceBox.astro";
 import Layout from "src/layouts/Layout.astro";
-
 ---
 
-<Layout title="Главная">
+<Layout
+  title="Главная"
+  scripts={["./libs/lightbox/lightbox-plus-jquery.js", "js/test.js"]}
+  styles={["./libs/lightbox/lightbox.min.css"]}
+>
 
+
+<GlanceBox />  
 </Layout>

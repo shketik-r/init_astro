@@ -2,7 +2,10 @@
 import LazyLoad from "vanilla-lazyload";
 import { vBoxHandler } from "./utils/vBox";
 import { Select } from "../../components/_UI/Select/Select";
-import "../styles/style.scss";
+import { initCustomSelects } from "../../components/_UI/CustomSelect/CustomSelect";
+import { initCustomInputDate } from "@components/_UI/CustomInputDate/CustomInputDate";
+import { GlanceBox } from "@components/_UI/GlanceBox/GlanceBox";
+
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -18,7 +21,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // компоненты
 
-  Select.initAll("[data-select]");
+  // Select.initAll("[data-select]");
+  // initCustomSelects('[custom-select]');
+  // initCustomInputDate();
+
+  // Инициализация после загрузки DOM
+
+  window.lumobox = new GlanceBox('[data-glancebox]');
+
+
   // <--
 
   // События
@@ -29,7 +40,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.addEventListener("vBoxContentLoaded", () => {
     // lazyLoad.update();
-    Select.initAll("[data-select]");
+    // Select.initAll("[data-select]");
+    //  initCustomSelects('[custom-select]');
   });
 });
 

@@ -1,0 +1,161 @@
+  .custom-input-date {
+    margin: 100px;
+    width: 100%;
+    max-width: 200px;
+    position: relative;
+  }
+
+  .custom-input-date.show .calendar {
+    display: flex;
+  }
+
+  .calendar {
+    background: #2e2f4f;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    flex-direction: column;
+    overflow: hidden;
+    position: absolute;
+    top: calc(100% + 10px);
+    width: 300px;
+    display: none;
+  }
+
+  .calendar-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #45466e;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: #45466e;
+  }
+
+  .month-year {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .calendar-year {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .calendar-year-dropdown {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: max-content;
+    max-height: 200px;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1;
+  }
+
+  .calendar-year-dropdown::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .calendar-year-dropdown::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  .calendar-year-dropdown::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .calendar-year-dropdown::-webkit-scrollbar-thumb {
+    background: #45466e;
+    border-radius: 10px;
+  }
+
+  .calendar-year-dropdown.show {
+    display: block;
+  }
+
+  .year-item {
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  .year-item:hover {
+    background: #9db5ff;
+  }
+
+  .nav-btn {
+    background: transparent;
+    border: none;
+    color: #cfcfee;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    user-select: none;
+    transition: color 0.2s ease;
+  }
+
+  .nav-btn:hover,
+  .nav-btn:focus {
+    color: #9db5ff;
+    outline: none;
+  }
+
+  .days-of-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: #3a3b5a;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 10px 0;
+    user-select: none;
+  }
+
+  .days-of-week div {
+    color: #b9bbd6;
+  }
+
+  .days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: #232340;
+    color: #eee;
+    user-select: none;
+  }
+
+  .day {
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #2e2f4f;
+    cursor: default;
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    font-size: 1rem;
+  }
+
+  .day.empty {
+    cursor: default;
+    background: #232340;
+    border: none;
+  }
+
+  .day.selected {
+    background: #9db5ff;
+    color: #2e2f4f;
+    font-weight: 700;
+    border-radius: 6px;
+  }

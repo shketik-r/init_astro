@@ -1,5 +1,6 @@
 ---
 const { title = "заголовок страницы" } = Astro.props;
+import "../assets/styles/global.scss";
 ---
 
 <!doctype html>
@@ -20,8 +21,6 @@ const { title = "заголовок страницы" } = Astro.props;
         <slot />
       </main>
 
-
   </body>
 </html>
 
-     <script src="../assets/scripts/main.js"></script>
