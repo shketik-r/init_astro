@@ -25,15 +25,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Инициализация после загрузки DOM
 
-  let lightboxElems = document.querySelectorAll('[data-lightbox]')
+  let lightboxElem = document.querySelector('[data-lightbox]')
 
-if (lightboxElems.length > 0) {
-  
-  lightbox.options.disableScrolling = true;
-  lightbox.options.fitImagesInViewport = true;
-  lightbox.options.wrapAround = true;
-  lightbox.options.resizeDuration = 700;
-}
+  if (lightboxElem) {
+    lightbox.Options({
+      fadeDuration: 600,
+      fitImagesInViewport: true,
+      imageFadeDuration: 600,
+      resizeDuration: 700,
+      wrapAround: true,
+      disableScrolling: true,
+    });
+  }
 
 
   // <--

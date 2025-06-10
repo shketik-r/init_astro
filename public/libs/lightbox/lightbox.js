@@ -1,8 +1,8 @@
 (function (root) {
-  function Lightbox(options) {
+  function Lightbox(newOptions) {
     this.album = [];
     this.currentImageIndex = undefined;
-    this.options = Object.assign({}, Lightbox.defaults, options);
+    this.options = Object.assign({}, Lightbox.defaults, newOptions);
     this.init();
   }
 
@@ -19,6 +19,11 @@
     disableScrolling: false,
     showDownload: false,
     sanitizeTitle: false
+  };
+
+
+  Lightbox.prototype.Options = function (newOptions) {
+    Object.assign(this.options, newOptions);
   };
 
   Lightbox.prototype.init = function () {
