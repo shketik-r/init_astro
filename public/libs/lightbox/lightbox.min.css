@@ -41,6 +41,11 @@ body.lb-disable-scrolling {
   margin: 0 auto;
 }
 
+.lightbox .lb-video{
+width: 80vw;
+height: 100%;
+}
+
 .lightbox a img {
   border: none
 }

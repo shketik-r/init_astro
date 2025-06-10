@@ -2,7 +2,9 @@
   function Lightbox(options) {
     this.album = [];
     this.currentImageIndex = undefined;
-    this.options = Object.assign({}, Lightbox.defaults, options);   
+    this.options = Object.assign({}, Lightbox.defaults, options);
+    console.log(options);
+
     this.init();
   }
 
@@ -55,6 +57,7 @@
         <div class="lb-outerContainer">
           <div class="lb-container">
             <img class="lb-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt=""/>
+            <div class="lb-video" style="display: none;"></div>
             <div class="lb-nav">
               <a href="#" class="lb-prev" role="button" aria-label="Предыдущее изображение"></a>
               <a href="#" class="lb-next" role="button" aria-label="Следующее изображение"></a>
@@ -77,6 +80,7 @@
     this.overlay = overlay;
     this.lightbox = lightbox;
     this.image = lightbox.querySelector('.lb-image');
+    this.videoContainer = lightbox.querySelector('.lb-video');
     this.prev = lightbox.querySelector('.lb-prev');
     this.next = lightbox.querySelector('.lb-next');
     this.loader = lightbox.querySelector('.lb-loader');
@@ -182,10 +186,55 @@
     this.changeImage(imageNumber);
   };
 
+  Lightbox.prototype.showLocalVideo = function (videoUrl) {
+    this.videoContainer.style.display = 'block';
+    this.videoContainer.innerHTML = `
+    <video controls autoplay style="width: 100%; height: 100%;">
+      <source src="${videoUrl}" type="video/${this.getVideoType(videoUrl)}">
+      Ваш браузер не поддерживает воспроизведение видео.
+    </video>
+  `;
+    this.loader.style.display = 'none';
+    this.image.style.display = 'none';
+    this.caption.textContent = ''; // Очистить подпись для видео
+    this.updateNav();
+  };
+
+  Lightbox.prototype.getVideoType = function (url) {
+    const ext = url.split('.').pop().toLowerCase();
+    switch (ext) {
+      case 'mp4': return 'mp4';
+      case 'webm': return 'webm';
+      case 'ogg': return 'ogg';
+      default: return '';
+    }
+  };
+
   Lightbox.prototype.changeImage = function (imageNumber) {
     const imageInfo = this.album[imageNumber];
     if (!imageInfo) return;
 
+    this.loader.style.display = 'block';
+    this.image.style.display = 'none';
+    this.videoContainer.style.display = 'none';
+
+    // Проверяем тип ссылки
+    if (imageInfo.link.match(/\.(mp4|webm|ogg)$/i)) {
+      this.showLocalVideo(imageInfo.link);
+      this.outerContainer.style.width = 80 + 'vw';
+      this.outerContainer.style.height = 80 + 'vh';
+
+    } else if (imageInfo.link.includes('youtube.com') || imageInfo.link.includes('youtu.be')) {
+      this.showVideo(imageInfo.link);
+      this.outerContainer.style.width = 80 + 'vw';
+      this.outerContainer.style.height = 80 + 'vh';
+
+    } else {
+      this.showImage(imageInfo);
+    }
+  };
+
+  Lightbox.prototype.showImage = function (imageInfo) {
     this.loader.style.display = 'block';
     this.image.style.display = 'none';
 
@@ -198,14 +247,14 @@
 
       this.sizeContainer(img.width, img.height);
 
-      this.currentImageIndex = imageNumber;
-    
-      this.caption.innerHTML = imageInfo.title || '';
+      this.currentImageIndex = this.album.indexOf(imageInfo);
+
+      this.caption.textContent = imageInfo.title || '';
       if (imageInfo.title) this.caption.style.display = 'block';
       else this.caption.style.display = 'none';
 
       if (this.album.length > 1 && this.options.showImageNumberLabel) {
-        this.number.textContent = this.options.albumLabel.replace('%1', (imageNumber + 1)).replace('%2', this.album.length);
+        this.number.textContent = this.options.albumLabel.replace('%1', (this.currentImageIndex + 1)).replace('%2', this.album.length);
         this.number.style.display = 'block';
       } else {
         this.number.style.display = 'none';
@@ -225,6 +274,29 @@
     };
   };
 
+  Lightbox.prototype.showVideo = function (videoUrl) {
+    this.videoContainer.style.display = 'block';
+    this.videoContainer.innerHTML = this.createVideoIframe(videoUrl);
+    this.loader.style.display = 'none';
+    this.image.style.display = 'none';
+    this.caption.textContent = ''; // Clear caption for video
+    this.updateNav();
+  };
+
+  Lightbox.prototype.createVideoIframe = function (videoUrl) {
+    const videoId = this.getYouTubeVideoId(videoUrl);
+    if (videoId) {
+      return `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+    }
+    return '';
+  };
+
+  Lightbox.prototype.getYouTubeVideoId = function (url) {
+    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^&\n]{11})/;
+    const matches = url.match(regex);
+    return matches ? matches[1] : null;
+  };
+
   Lightbox.prototype.sizeOverlay = function () {
     this.overlay.style.width = Math.max(document.documentElement.scrollWidth, window.innerWidth) + 'px';
     this.overlay.style.height = Math.max(document.documentElement.scrollHeight, window.innerHeight) + 'px';
@@ -237,7 +309,7 @@
 
     let displayWidth = imageWidth;
     let displayHeight = imageHeight;
-  
+
     if (displayWidth > maxWidth) {
       displayWidth = maxWidth;
       displayHeight = imageHeight * (maxWidth / imageWidth);
@@ -247,13 +319,14 @@
       displayWidth = displayWidth * (maxHeight / displayHeight);
     }
 
-    this.outerContainer.style.width = displayWidth  + 'px';
+    this.outerContainer.style.width = displayWidth + 'px';
     this.outerContainer.style.height = displayHeight + 'px';
     this.image.style.width = 'auto';
-    this.dataContainer.style.width = displayWidth  + 'px';
+    this.image.style.height = displayHeight + 'px';
+    this.dataContainer.style.width = displayWidth + 'px';
   };
 
-  Lightbox.prototype.updateNav = function () {   
+  Lightbox.prototype.updateNav = function () {
     if (this.album.length > 1) {
       if (this.options.wrapAround) {
         this.prev.style.display = 'block';
@@ -271,6 +344,7 @@
   Lightbox.prototype.end = function () {
     this.lightbox.style.display = 'none';
     this.overlay.style.display = 'none';
+    this.videoContainer.innerHTML = ''; // Clear video on close
 
     if (this.options.disableScrolling) {
       document.body.classList.remove('lb-disable-scrolling');
