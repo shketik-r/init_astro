@@ -197,6 +197,7 @@
     this.loader.style.display = 'none';
     this.image.style.display = 'none';
     this.caption.textContent = ''; // Очистить подпись для видео
+    this.number.style.display = 'none';
     this.updateNav();
   };
 
@@ -286,6 +287,7 @@
   Lightbox.prototype.createVideoIframe = function (videoUrl) {
     const videoId = this.getYouTubeVideoId(videoUrl);
     if (videoId) {
+      this.number.style.display = 'none';
       return `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
     }
     return '';
