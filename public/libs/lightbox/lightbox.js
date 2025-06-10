@@ -3,8 +3,6 @@
     this.album = [];
     this.currentImageIndex = undefined;
     this.options = Object.assign({}, Lightbox.defaults, options);
-    console.log(options);
-
     this.init();
   }
 
@@ -354,5 +352,6 @@
   };
 
   root.lightbox = new Lightbox();
+
 })(window);
 
