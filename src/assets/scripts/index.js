@@ -4,8 +4,6 @@ import { vBoxHandler } from "./utils/vBox";
 import { Select } from "../../components/_UI/Select/Select";
 import { initCustomSelects } from "../../components/_UI/CustomSelect/CustomSelect";
 import { initCustomInputDate } from "@components/_UI/CustomInputDate/CustomInputDate";
-import { GlanceBox } from "@components/_UI/GlanceBox/GlanceBox";
-
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -27,7 +25,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Инициализация после загрузки DOM
 
-  window.glanceBox = new GlanceBox('[data-glancebox]');
+  let lightboxElems = document.querySelectorAll('[data-lightbox]')
+
+if (lightboxElems.length > 0) {
+  
+  lightbox.options.disableScrolling = true;
+  lightbox.options.fitImagesInViewport = true;
+  lightbox.options.wrapAround = true;
+  lightbox.options.resizeDuration = 700;
+}
 
 
   // <--
@@ -42,6 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // lazyLoad.update();
     // Select.initAll("[data-select]");
     // initCustomSelects('[custom-select]');
+    lightbox.init();
   });
 });
 

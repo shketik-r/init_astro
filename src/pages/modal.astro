@@ -1,13 +1,21 @@
 ---
-import CustomSelect from "@components/_UI/CustomSelect/CustomSelect.astro";
 
 ---
 
 
-  <CustomSelect>
-    <option value="-" hidden selected>выбрать</option>
-    <option value="1">option 1</option>
-    <option value="2" disabled>option 2</option>
-    <option value="3">option 3</option>
-  </CustomSelect>
+  <div class="gallery">
+    <a href="./img/galacebox.jpg" data-lightbox="image" data-title="" >
+      <img src="./img/galacebox.jpg" alt="Изображение 1" />
+    </a>
+    <a href="./img/galacebox2.jpg" data-lightbox="image">
+      <img src="./img/galacebox2.jpg" alt="Изображение 2" />
+    </a>
+    <a href="./img/galacebox3.jpg" data-lightbox="image">
+      <img src="./img/galacebox3.jpg" alt="Изображение 3" />
+    </a>
+
+    <a href="./img/galacebox4.jpg" data-lightbox="image">
+      <img src="./img/galacebox4.jpg" alt="Изображение 4" />
+    </a>
+  </div>
 
