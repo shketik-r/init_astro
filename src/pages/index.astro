@@ -1,129 +1,128 @@
 ---
-import LayoutProgress from "../layouts/LayoutProgress.astro";
-
+import Layout from "../layouts/Layout.astro";
 ---
 
-<LayoutProgress title="Главная" scripts={['./libs/swiper/swiper-bundle.min.js']}>
+<Layout title="Главная">
   <div class="_progress">
     <div class="_progress__inner">
       <p class="_progress__title">Содержание:</p>
       <ol>
         <li><a href="home.html" class="_progress__link">Главная</a></li>
-        
+
         <li class="special">
           <a href="icons.html" class="_progress__link">Иконки</a>
         </li>
       </ol>
     </div>
   </div>
-</LayoutProgress>
 
-<style is:inline>
-  @import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap");
-
-  ._progress {
-    display: flex;
-    align-items: flex-start;
-    padding: 3rem;
-    background: #fff;
-  }
-
-  ._progress ol {
-    list-style-type: decimal;
-    list-style-position: inside;
-    list-style: none;
-    counter-reset: my-awesome-counter;
-    columns: 1;
-    margin-bottom: 1rem;
-    padding-left: 0;
-  }
-
-  ._progress ol li {
-    font-family: Ubuntu;
-    transition: all 0.3s;
-    counter-increment: my-awesome-counter;
-    position: relative;
-    z-index: 5;
-    margin-left: 3rem;
-    width: max-content;
-  }
-
-  ._progress ol li.special a {
-    background: #a87131;
-  }
-
-  ._progress ol li::before {
-    content: counter(my-awesome-counter) ". ";
-    color: black;
-    position: absolute;
-    left: -3rem;
-    top: 0.4rem;
-    border-radius: 0.5rem 0 0 0.5rem;
-    z-index: 1;
-    transition: all 0.3s ease-in-out;
-    font-size: 1.6rem;
-  }
-
-  ._progress ol li:hover a {
-    transform: translateY(-2px);
-    box-shadow: 0px 0.3rem 0.8rem 0px #8686866e;
-  }
-
-  ._progress__link {
-    background: #88a831;
-    padding: 0.5rem 1.6rem;
-    margin-bottom: 1rem;
-    border-radius: 0.6rem;
-    width: 100%;
-    display: inline-block;
-    font-size: 1.6rem;
-    font-weight: 400;
-    color: #fff;
-    position: relative;
-    z-index: 30;
-    text-decoration: none;
-    transition: all 0.3s;
-  }
-
-  ._progress__title {
-    font-family: Ubuntu;
-    font-size: 1.8rem;
-    text-transform: uppercase;
-    color: #000;
-    margin-bottom: 5rem;
-  }
-
-  @media (max-width: 1024px) {
-    .link-title {
-      font-size: 1.5rem;
-    }
+  <style is:inline>
+    @import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap");
 
     ._progress {
-      padding-top: 2rem;
-    }
-
-    ._progress ol li {
-      font-size: 1.5rem;
-      margin-left: 0;
+      display: flex;
+      align-items: flex-start;
+      padding: 3rem;
+      background: #fff;
     }
 
     ._progress ol {
+      list-style-type: decimal;
+      list-style-position: inside;
+      list-style: none;
+      counter-reset: my-awesome-counter;
       columns: 1;
+      margin-bottom: 1rem;
+      padding-left: 0;
     }
 
-    ._progress__link {
-      font-size: 1.2rem;
-      line-height: normal;
+    ._progress ol li {
+      font-family: Ubuntu;
+      transition: all 0.3s;
+      counter-increment: my-awesome-counter;
+      position: relative;
+      z-index: 5;
+      margin-left: 3rem;
+      width: max-content;
     }
 
-    ._progress__title {
-      margin-bottom: 2rem;
+    ._progress ol li.special a {
+      background: #a87131;
     }
 
     ._progress ol li::before {
-      left: -2.5rem;
-
-      width: 1.5rem;
+      content: counter(my-awesome-counter) ". ";
+      color: black;
+      position: absolute;
+      left: -3rem;
+      top: 0.4rem;
+      border-radius: 0.5rem 0 0 0.5rem;
+      z-index: 1;
+      transition: all 0.3s ease-in-out;
+      font-size: 1.6rem;
     }
-  }
-</style>
+
+    ._progress ol li:hover a {
+      transform: translateY(-2px);
+      box-shadow: 0px 0.3rem 0.8rem 0px #8686866e;
+    }
+
+    ._progress__link {
+      background: #88a831;
+      padding: 0.5rem 1.6rem;
+      margin-bottom: 1rem;
+      border-radius: 0.6rem;
+      width: 100%;
+      display: inline-block;
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: #fff;
+      position: relative;
+      z-index: 30;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    ._progress__title {
+      font-family: Ubuntu;
+      font-size: 1.8rem;
+      text-transform: uppercase;
+      color: #000;
+      margin-bottom: 5rem;
+    }
+
+    @media (max-width: 1024px) {
+      .link-title {
+        font-size: 1.5rem;
+      }
+
+      ._progress {
+        padding-top: 2rem;
+      }
+
+      ._progress ol li {
+        font-size: 1.5rem;
+        margin-left: 0;
+      }
+
+      ._progress ol {
+        columns: 1;
+      }
+
+      ._progress__link {
+        font-size: 1.2rem;
+        line-height: normal;
+      }
+
+      ._progress__title {
+        margin-bottom: 2rem;
+      }
+
+      ._progress ol li::before {
+        left: -2.5rem;
+
+        width: 1.5rem;
+      }
+    }
+  </style>
+</Layout>

@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Select.initAll("[data-select]");
   // initCustomSelects('[custom-select]');
-  // initCustomInputDate();
+  initCustomInputDate();
 
   // Инициализация после загрузки DOM
 

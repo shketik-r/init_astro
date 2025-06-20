@@ -1,33 +1,41 @@
 ---
 import Layout from "src/layouts/Layout.astro";
 import icons from "src/icons.json";
-import "../assets/styles/main.scss";
+import Footer from "@components/Footer/Footer.astro";
+import Header from "@components/Header/Header.astro";
+import "../assets/styles/blog2.scss"
 ---
 
+<Layout title="all icons">
 
 
-<Layout 
-title="****" >
-<Layout title="all icons" >
-  <div class="icons-all container">
-  <h2>Иконки</h2>
-  <div class="icons-grid">
-    {
-      icons.map((icon) => {
-        return (
-          <div class="icons-item">
-            <div class="icons-item-name">{icon}</div>
-            <svg>
-              <use href=`#iconSearch` />
-            </svg>
+    <Header />
+
+    <main class="page">
+
+     <div class="icons-all container">
+          <h2>Иконки</h2>
+          <div class="icons-grid">
+            {
+              icons.map((icon) => {
+                return (
+                  <div class="icons-item">
+                    <div class="icons-item-name">{icon}</div>
+                    <svg>
+                      <use href=`#${icon}` />
+                    </svg>
+                  </div>
+                );
+              })
+            }
           </div>
-        );
-      })
-    }
-  </div>
-  </div>
+      </div>
 
-</Layout>
+    </main>
+
+    <Footer />
+
+<script src="../assets/scripts/main.js"></script>
 
 
 <style is:inline>
@@ -63,3 +71,10 @@ title="****" >
     height: 40px;
   }
 </style>
+
+
+</Layout>
+
+
+
+

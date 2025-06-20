@@ -1,15 +1,12 @@
 ---
-import Header from "@components/Header/Header.astro";
-import Footer from "@components/Footer/Footer.astro";
 import SpriteGroup from "@components/Sprite/SpriteGroup.astro";
-import   "../assets/styles/global.scss";
+import "../assets/styles/global.scss";
 interface Props {
   title?: string;
-  scripts?: string[] | undefined;
-  styles?: string[] | undefined;
+  libStyles?: string[] | undefined;
 }
 
-const { title = "заголовок страницы", scripts, styles } = Astro.props;
+const { title = "заголовок страницы", libStyles } = Astro.props;
 ---
 
 <!doctype html>
@@ -23,32 +20,23 @@ const { title = "заголовок страницы", scripts, styles } = Astro
 
     <title>{title}</title>
 
+    {
+      libStyles &&
+        libStyles.map((style) => <link rel="stylesheet" href={style} />)
+    }
 
-    {styles && styles.map((style) => <link rel="stylesheet" href={style} />)}
-    
     <!-- <script
       src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=de8b84da-ef52-4fe3-a58b-64374e973f5a"
       type="text/javascript"></script> -->
   </head>
 
   <body>
-    <Header />
-    <main class="page">
-      <slot />
-    </main>
-    <Footer />
+
+    <slot />
+
+    <script src="../assets/scripts/index.js"></script>
+
     <SpriteGroup />
-
-
-    {
-      scripts &&
-        scripts.map((s: string) => {
-          return <script src={s} />;
-        })
-    }
-
-    <script>
-      import "../assets/scripts/index.js";
-    </script>
+    
   </body>
 </html>
