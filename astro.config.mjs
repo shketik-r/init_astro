@@ -1,45 +1,27 @@
 import { defineConfig } from "astro/config";
 
-
-
 export default defineConfig({
-  devToolbar: {
-    enabled: false
-  },
-  css: {
-    modules: false,
-  },
-  // Отключает разбитие CSS
-  cssCodeSplit: true,
-  // Отключает минификацию HTML
-  compressHTML: false,
+  compressHTML: false, // Отключает минификацию HTML
   trailingSlash: "never",
-  output: 'static',
+  output: "static",
   build: {
     outDir: 'dist',
     format: "file",
     assetsPrefix: "./",
-    styles: {
-      include: ['src/styles/blog.scss'],
-      dest: 'dist/styles',
-    },
-
+    client: './client',
+    inlineStylesheets: 'never',
+    assetsDir: 'assets'
   },
   vite: {
-    build: {
-      // Отключает разбитие CSS
-      cssCodeSplit: true,
-      // Отключает минификацию в CSS и JS
-      minify: false,
-      assetsInlineLimit: 0,
-      polyfill: false,
 
+    build: {
+      cssCodeSplit: true, // Отключает разбитие CSS
+      minify: false, // Отключает минификацию в CSS и JS
+      assetsInlineLimit: 0,
 
       rollupOptions: {
-
         output: {
           entryFileNames: (chunkInfo) => {
-
             const scriptFiles = chunkInfo.moduleIds.filter(path => {
               const segments = path.split('/');
               const scriptIndex = segments.indexOf('scripts');
@@ -49,14 +31,16 @@ export default defineConfig({
             return `js/${scriptFileNamesInRoot[0]}`;
           },
           assetFileNames: (chunkInfo) => {
+             
             if (chunkInfo.type === 'asset' && chunkInfo.name.endsWith('.css')) {
-              return `css/${chunkInfo.name.split('/').pop()}`; // сохраняем оригинальное имя в папке css
+            console.log(chunkInfo);
+              
+              return `css/index.css`;
             }
             return chunkInfo.name;
-          }
+          },
         },
       },
-
     },
   },
 });
