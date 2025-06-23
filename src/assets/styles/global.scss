@@ -1,9 +1,9 @@
-@import "scss-reset/reset";
-@import "normalize-scss";
-@import "./utils/vars";
-@import "./utils/mixins";
-@import "./utils/fonts";
-@import "node_modules/venobox/dist/venobox.css";
+@use "scss-reset/reset";
+// @import "normalize-scss";
+// @import "./utils/vars";
+// @import "./utils/mixins";
+// @import "./utils/fonts";
+// @import "node_modules/venobox/dist/venobox.css";
 // @import "plyr/dist/plyr.css";
 
 html {
@@ -12,9 +12,12 @@ html {
 
 
 
-@import "./general";
-@import "./components";
-@import "./pages";
+
+
+// @import "./general";
+// @import "./components";
+// @import "./pages";
+
 
 
 
