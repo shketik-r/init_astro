@@ -1,12 +1,12 @@
 ---
 import SpriteGroup from "@components/Sprite/SpriteGroup.astro";
-import "../assets/styles/global.scss";
+// import "../assets/styles/global.scss";
 interface Props {
   title?: string;
-  libStyles?: string[] | undefined;
+  styles?: string[] | undefined;
 }
 
-const { title = "заголовок страницы", libStyles } = Astro.props;
+const { title = "заголовок страницы", styles } = Astro.props;
 ---
 
 <!doctype html>
@@ -21,9 +21,14 @@ const { title = "заголовок страницы", libStyles } = Astro.props
     <title>{title}</title>
 
     {
-      libStyles &&
-        libStyles.map((style) => <link rel="stylesheet" href={style} />)
+      styles &&
+        styles.map((style) => <link rel="stylesheet" href={style} />)
     }
+
+
+    <!-- <style is:global>
+     @import "../assets/styles/custom-name.css";
+   </style> -->
 
     <!-- <script
       src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=de8b84da-ef52-4fe3-a58b-64374e973f5a"
@@ -31,12 +36,10 @@ const { title = "заголовок страницы", libStyles } = Astro.props
   </head>
 
   <body>
-
     <slot />
 
     <script src="../assets/scripts/index.js"></script>
 
     <SpriteGroup />
-    
   </body>
 </html>

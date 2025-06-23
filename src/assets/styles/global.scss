@@ -1,4 +1,4 @@
-// @import "scss-reset/reset";
+@use "scss-reset/reset";
 // @import "normalize-scss";
 // @import "./utils/vars";
 // @import "./utils/mixins";
@@ -12,9 +12,12 @@ html {
 
 
 
+
+
 // @import "./general";
 // @import "./components";
 // @import "./pages";
+
 
 
 
