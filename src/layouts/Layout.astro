@@ -1,9 +1,10 @@
 ---
 import SpriteGroup from "@components/Sprite/SpriteGroup.astro";
-// import "../assets/styles/global.scss";
+const isDev = import.meta.env.DEV;
 interface Props {
   title?: string;
   styles?: string[] | undefined;
+
 }
 
 const { title = "заголовок страницы", styles } = Astro.props;
@@ -18,14 +19,13 @@ const { title = "заголовок страницы", styles } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
+    
+
     <title>{title}</title>
 
-    {
-      styles &&
-        styles.map((style) => <link rel="stylesheet" href={style} />)
-    }
+    {styles && styles.map((style) => <link rel="stylesheet" href={style} />)}
 
-
+    <link rel="stylesheet" href="/css/global.css" />
     <!-- <style is:global>
      @import "../assets/styles/custom-name.css";
    </style> -->
@@ -33,6 +33,10 @@ const { title = "заголовок страницы", styles } = Astro.props;
     <!-- <script
       src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=de8b84da-ef52-4fe3-a58b-64374e973f5a"
       type="text/javascript"></script> -->
+
+       {isDev && (
+      <script src="http://localhost:35729/livereload.js?snipver=1" defer></script>
+    )}
   </head>
 
   <body>

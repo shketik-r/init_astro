@@ -1,32 +1,15 @@
-@use "scss-reset/reset";
-// @import "normalize-scss";
-// @import "./utils/vars";
-// @import "./utils/mixins";
-// @import "./utils/fonts";
-// @import "node_modules/venobox/dist/venobox.css";
+
+
+@use "../../../node_modules/venobox/dist/venobox";
+@use "utils/vars";
+@use "utils/mixins";
+@use "utils/fonts";
+
+
+
 // @import "plyr/dist/plyr.css";
 
-html {
-  box-sizing: border-box;
-}
+@use "general";
+@use "components";
 
 
-
-
-
-// @import "./general";
-// @import "./components";
-// @import "./pages";
-
-
-
-
-.gallery{
-  display: flex;
-  gap: 20px;
-
-  img{
-    width: 200px;
-  }
-  
-}

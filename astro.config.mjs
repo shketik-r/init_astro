@@ -1,115 +1,65 @@
-import { defineConfig } from "astro/config"
-import { viteStaticCopy } from 'vite-plugin-static-copy'
-import sass from 'sass'
-import fs from 'fs'
-import path from 'path'
-import chokidar from 'chokidar'
-
-function scssWatcher() {
-  return {
-    name: 'scss-watcher',
-    configureServer(server) {
-      const compileFile = (filePath) => {
-        try {
-          const result = sass.compile(filePath, {
-            style: 'expanded',
-            loadPaths: [path.dirname(filePath)]
-          })
-
-          const relativePath = path.relative('src/assets/styles/page', filePath)
-          const destPath = path.join(
-            'public/css',
-            relativePath.replace(/\.(scss|sass)$/, '.css')
-          )
-
-          if (!fs.existsSync(destPath)) {
-            fs.mkdirSync(path.dirname(destPath), { recursive: true })
-          }
-          
-          fs.writeFileSync(destPath, result.css)
-          console.log(`✅ Compiled: ${filePath} → ${destPath}`)
-        } catch (error) {
-          console.error(`❌ Failed to compile ${filePath}:`, error.message)
-        }
-      }
-
-      const watcher = chokidar.watch('src/assets/styles/page/**/*.{scss,sass}', {
-        ignoreInitial: false,
-        persistent: true,
-        usePolling: true // Для лучшей совместимости в некоторых средах
-      })
-
-      watcher
-        .on('add', compileFile)
-        .on('change', compileFile)
-        .on('unlink', (filePath) => {
-          const cssFile = path.join(
-            'public/css',
-            path.relative('src/assets/styles/page', filePath)
-              .replace(/\.(scss|sass)$/, '.css')
-          )
-          try {
-            fs.unlinkSync(cssFile)
-            console.log(`🗑️ Removed: ${cssFile}`)
-          } catch (err) {
-            if (err.code !== 'ENOENT') console.error(err)
-          }
-        })
-
-      server.httpServer?.once('close', () => {
-        watcher.close()
-        console.log('👋 SCSS watcher stopped')
-      })
-
-      console.log('👀 SCSS watcher started')
-    }
-  }
-}
+import { defineConfig } from 'astro/config';
+import viteSass from 'vite-plugin-sass';
 
 export default defineConfig({
+  // Базовые настройки Astro
   devToolbar: { enabled: false },
+  // Отключает минификацию HTML
+  compressHTML: false,
   output: 'static',
   build: {
-    outDir: 'dist',
-    assetsPrefix: './'
+    format: "file",
+    assetsPrefix: "./",
   },
+
+  // Vite конфигурация
   vite: {
-    plugins: [
-      scssWatcher(),
-      viteStaticCopy({
-        targets: [
-          {
-            src: 'src/assets/styles/page/**/*.{scss,sass}',
-            dest: 'css',
-            rename: (name) => name.replace(/\.(scss|sass)$/, '.css'),
-            transform: (content, srcPath) => {
-              try {
-                const result = sass.compileString(content.toString(), {
-                  style: 'compressed',
-                  loadPaths: [path.dirname(srcPath)]
-                })
-                return result.css
-              } catch (error) {
-                console.error(`Build error for ${srcPath}:`, error.message)
-                return ''
-              }
-            }
-          }
-        ],
-        hook: 'buildStart'
-      })
-    ],
+    plugins: [viteSass()],
+    server: {
+      hmr: {
+        port: 4323, // или другой порт, на котором слушает Astro
+        host: 'localhost',
+      },
+      watch: {
+        // отслеживать изменения в папке с CSS
+        paths: ['assets/styles/**/*.scss', 'assets/styles/**/*.css'],
+      },
+    },
     build: {
+      cssCodeSplit: true,       // Включаем разбиение CSS на отдельные файлы
+      inlineStylesheets: 'never',
+      minify: false,
+      assetsInlineLimit: 0,
+      polyfill: false,
       rollupOptions: {
         output: {
-          assetFileNames: (assetInfo) => {
-            if (assetInfo.name?.endsWith('.css')) {
-              return 'assets/css/[name][extname]'
+          entryFileNames: (chunkInfo) => {
+            const scriptFiles = chunkInfo.moduleIds.filter(path => {
+              const segments = path.split('/');
+              const scriptIndex = segments.indexOf('scripts');
+              return scriptIndex !== -1 && segments.length === scriptIndex + 2;
+            });
+            const scriptFileNamesInRoot = scriptFiles.map(filePath => filePath.split('/').pop().split('\\').pop());
+            return `js/${scriptFileNamesInRoot[0]}`; // Оригинальные имена для скриптов
+          },
+          assetFileNames: (chunkInfo) => {
+            console.log(chunkInfo.originalFileName);
+
+            if (chunkInfo.name && chunkInfo.name.endsWith('.css')) {
+              return 'css/[name][extname]';  // Оригинальные имена для файлов css
             }
-            return 'assets/[name][extname]'
-          }
-        }
-      }
+            return 'assets/[name]-[hash][extname]';
+          },
+        },
+      },
+    },
+  },
+
+  // Настройки Markdown
+  markdown: {
+    syntaxHighlight: 'prism',
+    shikiConfig: {
+      theme: 'github-dark'
     }
   }
 })

@@ -1,13 +1,13 @@
 // UI
-@import "../../components/_UI/Select/Select.scss";
-@import "../../components/_UI/CustomSelect/CustomSelect.scss";
-@import "../../components/_UI/CustomInputDate/CustomInputDate.scss";
+@use "../../components/_UI/Select/Select.scss";
+@use "../../components/_UI/CustomSelect/CustomSelect.scss";
+@use "../../components/_UI/CustomInputDate/CustomInputDate.scss";
 
 // COMPONENTS
 
-@import "../../components/Footer/Footer.scss";
-@import "../../components/Breadcrumbs/Breadcrumbs.scss";
-@import "../../components/Pagination/Pagination.scss";
+@use "../../components/Footer/Footer.scss";
+@use "../../components/Breadcrumbs/Breadcrumbs.scss";
+@use "../../components/Pagination/Pagination.scss";
 
 
 
