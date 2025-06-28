@@ -1,1 +1,0 @@
-.breadcrumbs{display:flex;align-items:center;justify-content:flex-start;flex-wrap:wrap;gap:.8rem}.breadcrumbs__link:not(:first-child)::before{content:"/";margin-right:.8rem}

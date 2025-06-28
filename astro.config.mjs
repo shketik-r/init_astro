@@ -14,16 +14,16 @@ export default defineConfig({
 
   // Vite конфигурация
   vite: {
-    plugins: [viteSass()],
+    // plugins: [viteSass()],
     server: {
-      hmr: {
-        port: 4323, // или другой порт, на котором слушает Astro
-        host: 'localhost',
-      },
-      watch: {
-        // отслеживать изменения в папке с CSS
-        paths: ['assets/styles/**/*.scss', 'assets/styles/**/*.css'],
-      },
+      // hmr: {
+      //   port: 4323, // или другой порт, на котором слушает Astro
+      //   host: 'localhost',
+      // },
+      // watch: {
+      //   // отслеживать изменения в папке с CSS
+      //   paths: ['assets/styles/**/*.scss', 'assets/styles/**/*.css'],
+      // },
     },
     build: {
       cssCodeSplit: true,       // Включаем разбиение CSS на отдельные файлы

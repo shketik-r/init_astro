@@ -2,12 +2,15 @@
   "author": "",
   "name": "astro-start-template",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
-    "sass:watch": "sass --watch src/assets/styles:public/css",
-    "livereload": "livereload public/css",
-    "dev": "concurrently \"npm run sass:watch\" \"npm run livereload\" \"astro dev\"",
-    "build": "concurrently \"npm run sass:watch\" \"astro build\""
+    "dev": "concurrently \"npm run watch:scss\" \"npm run postcss:watch\" \"npm run livereload\" \"astro dev\"",
+    "build": "npm run sass && npm run postcss && astro build",
+    "watch:scss": "chokidar \"src/**/*.scss\" -c \"npm run sass\"",
+    "sass": "sass --style=expanded src/assets/styles:public/css",
+    "postcss": "postcss public/css/*.css --replace",
+    "postcss:watch": "postcss public/css/*.css --watch --replace --verbose",
+    "livereload": "livereload public/css"
   },
   "dependencies": {
     "astro": "^5.8.1",
@@ -19,12 +22,15 @@
   },
   "devDependencies": {
     "astro": "^5.10.0",
-    "autoprefixer": "^10.4.15",
+    "autoprefixer": "^10.4.21",
+    "chokidar-cli": "^3.0.0",
     "concurrently": "^9.2.0",
     "cssnano": "^6.0.1",
     "livereload": "^0.9.3",
     "normalize-scss": "^7.0.1",
     "npm-run-all": "^4.1.5",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
     "postcss-preset-env": "^9.1.1",
     "prettier": "^3.0.2",
     "prettier-plugin-astro": "^0.12.0",
