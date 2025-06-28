@@ -6,7 +6,7 @@ const config = {
   plugins: [
     autoprefixer(),
     postcssPresetEnv({ stage: 1 }),
-    // cssnano({ preset: "default" }),
+    // cssnano({ preset: "default" }), // Отключаем минификацию
   ],
 };
 
