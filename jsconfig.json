@@ -6,7 +6,6 @@
       "@components/*": ["src/components/*"],
       "@modules/*": ["src/modules/*"],
       "@assets/*": ["src/assets/*"],
-      "@node_modules/*": ["node_modules/*"]
     }
   }
 }
