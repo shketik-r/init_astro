@@ -1,6 +1,5 @@
-div{
-  span{
-    display: block;
-    
-  }
+@use 'utils/var.scss';
+
+body{
+  background-color: var(--color-primary);
 }

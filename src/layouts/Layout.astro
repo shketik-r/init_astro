@@ -1,49 +1,79 @@
 ---
-import SpriteGroup from "@components/Sprite/SpriteGroup.astro";
-const isDev = import.meta.env.DEV;
-interface Props {
-  title?: string;
-  styles?: string[] | undefined;
+const { title, scriptName, styleName } = Astro.props;
 
-}
+// Превращаем проп в массив
+const scriptsArray = scriptName
+    ? (Array.isArray(scriptName) ? scriptName : [scriptName])
+    : [];
+const stylesArray = styleName ? (Array.isArray(styleName) ? styleName : [styleName]) : [];
 
-const { title = "заголовок страницы", styles } = Astro.props;
+// подмен расширения
+const getProdStyleName = (name) => {
+    return name.endsWith('.scss') ? name.replace('.scss', '.css') : name;
+};
+
+
 ---
 
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/img/favicon.svg" />
+		<link rel="icon" href="/img/favicon.ico" />
+        <meta name="generator" content={Astro.generator} />
 
-    
+        <title>Astro Basics</title>
 
-    <title>{title}</title>
+        <!--ПОДКЛЮЧЕНИЕ СТИЛЕЙ-->
+        {/* ДЛЯ РАЗРАБОТКИ  (глобальные стили) */}
+        {import.meta.env.DEV && (
+                <link rel="stylesheet" href="src/assets/styles/global.scss" />
+        )}
 
-    {styles && styles.map((style) => <link rel="stylesheet" href={style} />)}
+        {/* ДЛЯ СБОРКИ (глобальные стили) */}
+        {import.meta.env.PROD && (
+                <link rel="stylesheet" href={`./css/global.css`} />
+        )}
 
-    <link rel="stylesheet" href="/css/global.css" />
-    <!-- <style is:global>
-     @import "../assets/styles/custom-name.css";
-   </style> -->
+        {stylesArray.length > 0 && stylesArray.map((name) => (
+                <>
+                    {/* ДЛЯ РАЗРАБОТКИ (динамические стили) */}
+                    {import.meta.env.DEV && (
+                            <link rel="stylesheet" href={`/src/assets/styles/${name}`} />
+                    )}
 
-    <!-- <script
-      src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=de8b84da-ef52-4fe3-a58b-64374e973f5a"
-      type="text/javascript"></script> -->
+                    {/* ДЛЯ СБОРКИ  (динамические стили) */}
+                    {import.meta.env.PROD && (
+                            <link rel="stylesheet" href={`./css/${getProdStyleName(name)}`} />
+                    )}
+                </>
+        ))}
 
-       {isDev && (
-      <script src="http://localhost:35729/livereload.js?snipver=1" defer></script>
-    )}
-  </head>
+	</head>
 
-  <body>
-    <slot />
+    <body>
 
-    <script src="../assets/scripts/index.js"></script>
 
-    <SpriteGroup />
-  </body>
+		<slot />
+
+
+        <!--ПОДКЛЮЧЕНИЕ СКРИПТОВ -->
+
+        {scriptsArray.length > 0 && scriptsArray.map((name) => (
+                <>
+                    {/* ДЛЯ РАЗРАБОТКИ (динамические скрипты) */}
+                    {import.meta.env.DEV && (
+                            <div set:html={`<script type="module" src="/src/assets/scripts/${name}"></script>`} />
+                    )}
+
+                    {/* ДЛЯ СБОРКИ (динамические скрипты) */}
+                    {import.meta.env.PROD && (
+                        <script is:inline type="module" src={`./js/${name}`}></script>
+                    )}
+                </>
+        ))}
+	</body>
 </html>
+
