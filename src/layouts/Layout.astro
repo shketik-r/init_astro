@@ -1,79 +1,154 @@
 ---
-const { title, scriptName, styleName } = Astro.props;
+interface Props {
+  title?: string;
+  scripts?: string | string[];
+  styles?: string | string[];
+  libStyles?: string | string[];
+  libScripts?: string | string[];
+}
+
+const { title, scripts, styles, libStyles, libScripts } = Astro.props;
 
 // Превращаем проп в массив
-const scriptsArray = scriptName
-    ? (Array.isArray(scriptName) ? scriptName : [scriptName])
-    : [];
-const stylesArray = styleName ? (Array.isArray(styleName) ? styleName : [styleName]) : [];
+const scriptsArray = scripts
+  ? Array.isArray(scripts)
+    ? scripts
+    : [scripts]
+  : [];
+
+const libScriptsArray = libScripts
+  ? Array.isArray(libScripts)
+    ? libScripts
+    : [libScripts]
+  : [];
+
+const stylesArray = styles ? (Array.isArray(styles) ? styles : [styles]) : [];
+
+const libStylesArray = libStyles
+  ? Array.isArray(libStyles)
+    ? libStyles
+    : [libStyles]
+  : [];
 
 // подмен расширения
-const getProdStyleName = (name) => {
-    return name.endsWith('.scss') ? name.replace('.scss', '.css') : name;
+const getProdStyleName = (name: string) => {
+  return name.endsWith(".scss") ? name.replace(".scss", ".css") : name;
 };
-
-
 ---
 
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/img/favicon.svg" />
-		<link rel="icon" href="/img/favicon.ico" />
-        <meta name="generator" content={Astro.generator} />
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/img/favicon.svg" />
+    <link rel="icon" href="/img/favicon.ico" />
 
-        <title>Astro Basics</title>
+    <title>{title}</title>
 
-        <!--ПОДКЛЮЧЕНИЕ СТИЛЕЙ-->
-        {/* ДЛЯ РАЗРАБОТКИ  (глобальные стили) */}
-        {import.meta.env.DEV && (
-                <link rel="stylesheet" href="src/assets/styles/global.scss" />
-        )}
+    <!-- LIBS STYLES -->
+    {/* стили библиотек */}
 
-        {/* ДЛЯ СБОРКИ (глобальные стили) */}
-        {import.meta.env.PROD && (
-                <link rel="stylesheet" href={`./css/global.css`} />
-        )}
+    {/* стили библиотек (динамические) */}
+    
+    {
+      libStylesArray.length > 0 &&
+        libStylesArray.map((style) => (
+          <link rel="stylesheet" href={`./libs/${style}`} />
+        ))
+    }
 
-        {stylesArray.length > 0 && stylesArray.map((name) => (
-                <>
-                    {/* ДЛЯ РАЗРАБОТКИ (динамические стили) */}
-                    {import.meta.env.DEV && (
-                            <link rel="stylesheet" href={`/src/assets/styles/${name}`} />
-                    )}
+    <!-- STYLES -->
+    {/* для разработки  (глобальные стили) */}
+    {
+      import.meta.env.DEV && (
+        <link rel="stylesheet" href="src/assets/styles/global.scss" />
+      )
+    }
 
-                    {/* ДЛЯ СБОРКИ  (динамические стили) */}
-                    {import.meta.env.PROD && (
-                            <link rel="stylesheet" href={`./css/${getProdStyleName(name)}`} />
-                    )}
-                </>
-        ))}
+    {/* для сборки (глобальные стили) */}
+    {
+      import.meta.env.PROD && (
+        <link rel="stylesheet" href={`./css/global.css`} />
+      )
+    }
 
-	</head>
+    {
+      stylesArray.length > 0 &&
+        stylesArray.map((name) => {
+          return (
+            <>
+              {/* для разработки (динамические стили) */}
+              {import.meta.env.DEV && (
+                <link rel="stylesheet" href={`/src/assets/styles/${name}`} />
+              )}
 
-    <body>
+              {/* для сборки  (динамические стили) */}
+              {import.meta.env.PROD && (
+                <link
+                  rel="stylesheet"
+                  href={`./css/${getProdStyleName(name)}`}
+                />
+              )}
+            </>
+          );
+        })
+    }
+  </head>
 
+  <body>
 
-		<slot />
+    <!-- CONTENT -->
+    <slot />
+    <!-- / CONTENT -->
 
+    <!-- LIBS SCRIPTS -->
 
-        <!--ПОДКЛЮЧЕНИЕ СКРИПТОВ -->
+    {/* скртпты библиотек */}
+    <script is:inline src="./libs/lazyload/lazyload.min.js"></script>
 
-        {scriptsArray.length > 0 && scriptsArray.map((name) => (
-                <>
-                    {/* ДЛЯ РАЗРАБОТКИ (динамические скрипты) */}
-                    {import.meta.env.DEV && (
-                            <div set:html={`<script type="module" src="/src/assets/scripts/${name}"></script>`} />
-                    )}
+    {/* скртпты библиотек (динамические) */}
+    {
+      libScriptsArray.length > 0 &&
+        libScriptsArray.map((s) => {
+          return <script is:inline src={`./libs/${s}`} />;
+        })
+    }
 
-                    {/* ДЛЯ СБОРКИ (динамические скрипты) */}
-                    {import.meta.env.PROD && (
-                        <script is:inline type="module" src={`./js/${name}`}></script>
-                    )}
-                </>
-        ))}
-	</body>
+    <!--SCRIPTS -->
+
+    {/* для разработки  (глобальные скрипты) */}
+    {
+      import.meta.env.DEV && (
+        <script src="/src/assets/scripts/main.js"></script>
+      )
+    }
+
+    {/* для сборки (глобальные скрипты) */}
+    {
+      import.meta.env.PROD && (
+        <script is:inline src={`./js/main.js`}></script>
+      )
+    }
+
+    {
+      scriptsArray.length > 0 &&
+        scriptsArray.map((s) => (
+          <>
+            {/* для разработки (динамические скрипты) */}
+            {import.meta.env.DEV && (
+              <div
+                data-astro="scripts"
+                set:html={`<script type="module" src="/src/assets/scripts/${s}"></script>`}
+              />
+            )}
+
+            {/* для сборки (динамические скрипты) */}
+            {import.meta.env.PROD && (
+              <script is:inline type="module" src={`./js/${s}`} />
+            )}
+          </>
+        ))
+    }
+  </body>
 </html>
-

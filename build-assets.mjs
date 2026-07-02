@@ -5,7 +5,7 @@ import path from 'path';
 const scriptsSourceDir = 'src/assets/scripts';
 const stylesSourceDir = 'src/assets/styles';
 
-// --- 1. СБОРКА СКРИПТОВ (JS) ---
+// ---  СБОРКА СКРИПТОВ (JS) ---
 const jsFiles = fs.existsSync(scriptsSourceDir) ? fs.readdirSync(scriptsSourceDir) : [];
 const jsEntryPoints = {};
 
@@ -52,15 +52,40 @@ if (Object.keys(jsEntryPoints).length > 0) {
 
 
 
-// --- 2. СБОРКА СТИЛЕЙ (CSS) ---
-const cssFiles = fs.existsSync(stylesSourceDir) ? fs.readdirSync(stylesSourceDir) : [];
+// ---  СБОРКА СТИЛЕЙ (CSS) ---
+// Функция для рекурсивного поиска всех CSS/SCSS файлов
+const getAllCssFiles = (dirPath, arrayOfFiles = []) => {
+    if (!fs.existsSync(dirPath)) return arrayOfFiles;
+    
+    const files = fs.readdirSync(dirPath);
+
+    files.forEach(file => {
+        const fullPath = path.join(dirPath, file);
+        if (fs.statSync(fullPath).isDirectory()) {
+            getAllCssFiles(fullPath, arrayOfFiles);
+        } else if (file.endsWith('.css') || file.endsWith('.scss')) {
+            // Игнорируем partial-файлы Sass (начинающиеся с подчеркивания, например, _variables.scss)
+            if (!file.startsWith('_')) {
+                arrayOfFiles.push(fullPath);
+            }
+        }
+    });
+
+    return arrayOfFiles;
+};
+
+const allCssFiles = getAllCssFiles(stylesSourceDir);
 const cssEntryPoints = {};
 
-cssFiles.forEach(file => {
-    if (file.endsWith('.css') || file.endsWith('.scss')) { // Поддерживает и чистый CSS, и SCSS
-        const name = path.parse(file).name;
-        cssEntryPoints[name] = path.join(stylesSourceDir, file);
-    }
+allCssFiles.forEach(filePath => {
+    // Получаем относительный путь от папки исходников
+    const relativePath = path.relative(stylesSourceDir, filePath);
+    
+    // Формируем имя точки входа без расширения
+    const entryName = path.join(path.dirname(relativePath), path.parse(filePath).name)
+        .replace(/\\/g, '/'); // Нормализуем слэши для Windows
+        
+    cssEntryPoints[entryName] = filePath;
 });
 
 if (Object.keys(cssEntryPoints).length > 0) {
@@ -74,12 +99,12 @@ if (Object.keys(cssEntryPoints).length > 0) {
             rollupOptions: {
                 input: cssEntryPoints,
                 output: {
-                    // Задаем жесткое имя для CSS файлов без хэшей
                     assetFileNames: '[name].[ext]'
                 }
             }
         }
     });
 }
+
 
 console.log(' Все скрипты (js/) и стили (css/) успешно собраны!');
